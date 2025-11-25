@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindCare Suite — Interactive Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+  --bg1:#151a2e; --bg2:#0b0b16; --card:#1f2746; --ink:#eaf0ff; --muted:#a8b5ff;
+  --accent:#6ae3ff; --good:#54f08f; --warn:#ffd06a; --vio:#9b8cff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font:16px/1.5 "Segoe UI",system-ui,Arial;
+  color:var(--ink);
+  background: radial-gradient(1200px 600px at 10% -10%, #1b2150 0%, transparent 60%),
+              radial-gradient(1000px 800px at 110% 20%, #182355 0%, transparent 60%),
+              linear-gradient(135deg, var(--bg1), var(--bg2));
+  min-height:100vh;
+}
+.wrap{max-width:980px;margin:40px auto;padding:0 16px}
+header{text-align:center;margin-bottom:18px}
+h1{margin:0;font-size:34px}
+.sub{color:var(--muted);margin:6px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:18px}
+.card{background:var(--card);border:1px solid #2b3668;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.card .in{padding:18px}
+h2{margin:0 0 10px 0;font-size:18px}
+label{display:block;margin:8px 0 6px 0;color:#cfd6ff;font-weight:600}
+input[type=text],textarea,select{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid #33417a;background:#161d3a;color:var(--ink)
+}
+textarea{min-height:100px;resize:vertical}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.btn{
+  background:var(--accent);color:#001016;border:0;border-radius:12px;
+  padding:10px 14px;font-weight:700;cursor:pointer
+}
+.btn:hover{filter:brightness(1.05)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid #31407a}
+.note{font-size:12px;color:#a8b5ff;margin-top:6px}
+.hero{
+  display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between
+}
+.hero .big{
+  font-size:28px;font-weight:800;background:linear-gradient(90deg,#eaf0ff,#6ae3ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero a.cta{
+  display:inline-block;text-decoration:none;color:#001016;background:var(--accent);
+  padding:12px 16px;border-radius:14px;font-weight:800
+}
+.hero a.cta:hover{filter:brightness(1.05)}
+small.hint{color:#9fb0ff}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🧠 MindCare Suite</h1>
+      <p class="sub">Interactive mental-wellness tracker (local & private)</p>
+    </header>
+
+    <!-- Hero row -->
+    <div class="card">
+      <div class="in hero">
+        <div class="big">Open your live dashboard</div>
+        <div>
+          <!-- सीधे CGI खोलने के लिए -->
+          <a class="cta" href="/cgi-bin/hello.cgi">Open Dashboard →</a><br>
+          <small class="hint">Dashboard, stats, journal & strategies — सब कुछ backend से render होगा.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Quick Log Mood -->
+      <div class="card">
+        <div class="in">
+          <h2>📊 Quick Mood Log</h2>
+          <form method="GET" action="/cgi-bin/hello.cgi">
+            <label>Choose mood</label>
+            <select name="moodInput" required>
+              <option value="">-- Select --</option>
+              <option>Happy</option>
+              <option>Sad</option>
+              <option>Anxious</option>
+              <option>Angry</option>
+              <option>Tired</option>
+              <option>Stressed</option>
+              <option>Neutral</option>
+              <option>Excited</option>
+              <option>Calm</option>
+            </select>
+            <div class="actions">
+              <button class="btn" type="submit" name="action" value="logMood">Log Mood</button>
+              <a class="btn ghost" href="/cgi-bin/hello.cgi">Open Full Dashboard</a>
+            </div>
+            <p class="note">Logs mood immediately, then dashboard दिखेगा.</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Thought Journal -->
+      <div class="card">
+        <div class="in">
+          <h2>📝 Thought Journal</h2>
+          <form method="GET" action="/cgi-bin/hello.cgi">
+            <label>Your thought</label>
+            <textarea name="thoughtInput" placeholder="What's on your mind?"></textarea>
+            <div class="actions">
+              <button class="btn" type="submit" name="action" value="addThought">Save Thought</button>
+              <a class="btn ghost" href="/cgi-bin/hello.cgi">Open Journal</a>
+            </div>
+            <p class="note">Timestamp अपने-आप जुड़ जाएगा (config के हिसाब से).</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Strategies -->
+      <div class="card">
+        <div class="in">
+          <h2>🛠️ Coping Strategies</h2>
+          <form method="GET" action="/cgi-bin/hello.cgi" class="actions">
+            <button class="btn" type="submit" name="action" value="suggestStrategy">Suggest</button>
+            <button class="btn" type="submit" name="action" value="useStrategy">Use Current</button>
+            <button class="btn" type="submit" name="action" value="addStrategy">Add Random</button>
+          </form>
+          <form method="GET" action="/cgi-bin/hello.cgi">
+            <label>Add custom</label>
+            <input type="text" name="newStrategy" placeholder="Your strategy (e.g., 5-min breathing)">
+            <div class="actions">
+              <button class="btn" type="submit" name="action" value="addCustomStrategy">Add Custom</button>
+            </div>
+          </form>
+          <p class="note">Dashboard में top-right पर Live Chat widget भी रहेगा (internet चाहिए).</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+
+
